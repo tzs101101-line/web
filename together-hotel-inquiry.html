@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>訂房需求詢價 | 一起一起旅店 花蓮中山館</title>
+<script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600;700&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --brand:         #3DC96A;
+  --emerald:       #1A8C4E;
+  --emerald-wash:  #C8F5DC;
+  --spring-wash:   #A8E8C4;
+  --forest:        #4A7062;
+  --forest-deep:   #2E5045;
+  --forest-mid:    #6A9082;
+  --forest-wash:   #E4EFEA;
+  --forest-mist:   #F3F8F5;
+  --stone:         #F5F7F5;
+  --cream:         #FFFFFF;
+  --gold:          #C9A55C;
+  --gold-dim:      rgba(201,165,92,0.13);
+  --gold-border:   rgba(201,165,92,0.38);
+  --ink:           #1A2B25;
+  --ink-soft:      #3D5750;
+  --ink-muted:     #7A9887;
+  --border:        #C8DDD6;
+  --border-light:  #DCEEE6;
+  --error:         #A83535;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  background: var(--stone);
+  color: var(--ink);
+  min-height: 100vh;
+  padding-bottom: 4rem;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── HEADER ─── */
+.header {
+  background: var(--brand);
+  padding: 2.25rem 1.5rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.header-leaf {
+  position: absolute;
+  top: -18px; right: -24px;
+  width: 130px; height: 130px;
+  opacity: 0.06;
+}
+.header-leaf2 {
+  position: absolute;
+  bottom: -20px; left: -20px;
+  width: 100px; height: 100px;
+  opacity: 0.05;
+  transform: scaleX(-1) rotate(-30deg);
+}
+.hotel-en {
+  font-size: 0.7rem; letter-spacing: 0.22em;
+  color: rgba(255,255,255,0.9); font-weight: 400;
+  text-transform: uppercase; margin-bottom: 0.6rem;
+  position: relative; z-index: 1;
+}
+.hotel-name {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1.6rem; font-weight: 600;
+  color: #FFFFFF; letter-spacing: 0.06em;
+  line-height: 1.35; position: relative; z-index: 1;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.15);
+}
+.hotel-branch {
+  font-size: 0.92rem; color: rgba(255,255,255,0.95);
+  letter-spacing: 0.14em; margin-top: 0.15rem;
+  position: relative; z-index: 1;
+}
+.header-gem {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0.5rem; margin-top: 1rem; position: relative; z-index: 1;
+}
+.gem-line { flex: 1; max-width: 48px; height: 1px; background: rgba(255,255,255,0.5); }
+.gem-dot { width: 6px; height: 6px; background: rgba(255,255,255,0.9); border-radius: 50%; }
+.header-page { font-size: 0.78rem; color: rgba(255,255,255,0.92); letter-spacing: 0.12em; margin-top: 0.7rem; position: relative; z-index: 1; }
+
+/* ─── NOTICE ─── */
+.notice {
+  margin: 1rem 1rem 0;
+  background: var(--cream);
+  border: 1px solid var(--border-light);
+  border-left: 3.5px solid var(--brand);
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+}
+.notice-title { font-size: 0.79rem; font-weight: 600; color: var(--forest-deep); margin-bottom: 0.45rem; }
+.notice ul { padding-left: 1.1rem; font-size: 0.74rem; color: var(--ink-soft); line-height: 1.9; list-style: disc; }
+
+/* ─── FORM BODY ─── */
+.form-body { padding: 1rem; display: flex; flex-direction: column; gap: 0.85rem; }
+
+/* ─── SECTION CARDS ─── */
+.sec {
+  background: var(--cream);
+  border-radius: 14px;
+  border: 1px solid var(--border-light);
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(46,80,69,0.07);
+}
+.sec-head {
+  padding: 0.75rem 1.1rem;
+  display: flex; align-items: center; gap: 0.65rem;
+  position: relative; overflow: hidden;
+  border-bottom: 1px solid var(--border-light);
+}
+.sec-ghost {
+  position: absolute; right: 0.6rem; top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Noto Serif TC', serif;
+  font-size: 2.8rem; font-weight: 700; line-height: 1;
+  color: var(--forest); opacity: 0.07;
+  pointer-events: none; user-select: none;
+  letter-spacing: -0.02em;
+}
+.sec-tag {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px;
+  background: var(--emerald-wash); border-radius: 7px;
+  font-size: 0.72rem; font-weight: 700; color: var(--emerald);
+  flex-shrink: 0;
+}
+.sec-title { font-size: 0.85rem; font-weight: 600; color: var(--ink); letter-spacing: 0.05em; }
+.sec-body { padding: 1rem 1.1rem; display: flex; flex-direction: column; gap: 0.85rem; }
+
+/* ─── FIELD PARTS ─── */
+.f-label {
+  font-size: 0.77rem; font-weight: 500; color: var(--ink-soft);
+  margin-bottom: 0.42rem; display: flex; align-items: center; gap: 0.3rem;
+}
+.req { font-size: 0.64rem; color: var(--error); }
+.hint { font-size: 0.71rem; color: var(--ink-muted); margin-top: 0.35rem; line-height: 1.75; }
+
+input[type="text"], input[type="tel"], input[type="email"],
+input[type="number"], input[type="date"], select, textarea {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  border-radius: 9px;
+  padding: 0.65rem 0.9rem;
+  font-size: 0.88rem;
+  font-family: 'Noto Sans TC', sans-serif;
+  color: var(--ink);
+  background: var(--cream);
+  transition: border-color 0.18s, box-shadow 0.18s;
+  -webkit-appearance: none; appearance: none;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(61,201,106,0.18);
+}
+
+/* ─── DATE ROW ─── */
+.date-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem; }
+.date-duo > div > label { display: block; font-size: 0.69rem; color: var(--ink-muted); margin-bottom: 0.3rem; }
+.nights-pill {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  background: var(--emerald-wash); border: 1px solid rgba(26,140,78,0.3);
+  border-radius: 20px; padding: 0.28rem 0.85rem;
+  font-size: 0.72rem; color: var(--emerald); font-weight: 600;
+  margin-top: 0.5rem; transition: opacity 0.25s;
+}
+.nights-pill.hidden { opacity: 0; pointer-events: none; }
+
+/* ─── ROOM GRID ─── */
+.room-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.55rem;
+}
+.room-card {
+  border: 1.5px solid var(--border-light);
+  border-radius: 11px;
+  padding: 0.7rem 0.65rem 0.6rem;
+  cursor: pointer;
+  transition: border-color 0.18s, background 0.18s;
+  background: var(--cream);
+  user-select: none;
+  position: relative;
+}
+.room-card.wide { grid-column: 1 / -1; }
+.room-card.selected {
+  border-color: var(--brand);
+  background: #F0FCF5;
+}
+.room-card-check {
+  position: absolute; top: 0.5rem; right: 0.5rem;
+  width: 17px; height: 17px;
+  border: 1.5px solid var(--border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.18s; font-size: 0.58rem; color: transparent;
+  background: var(--cream);
+}
+.room-card.selected .room-card-check {
+  background: var(--brand); border-color: var(--brand); color: #fff;
+}
+.room-card-name {
+  font-size: 0.79rem; color: var(--ink-soft);
+  font-weight: 400; padding-right: 1.3rem;
+  line-height: 1.45;
+}
+.room-card.selected .room-card-name { color: var(--forest-deep); font-weight: 500; }
+
+.room-card-ctr {
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 0;
+  max-height: 0; overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.22s ease, opacity 0.2s, margin-top 0.22s;
+  pointer-events: none;
+}
+.room-card.selected .room-card-ctr {
+  max-height: 40px; opacity: 1; margin-top: 0.55rem; pointer-events: auto;
+}
+.rc-btn {
+  width: 28px; height: 28px;
+  border: 1.5px solid var(--border); background: var(--cream);
+  color: var(--emerald); font-size: 1rem; line-height: 1;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background 0.12s; flex-shrink: 0;
+}
+.rc-btn:first-child { border-radius: 6px 0 0 6px; }
+.rc-btn:last-child  { border-radius: 0 6px 6px 0; }
+.rc-btn:active { background: var(--emerald-wash); }
+.rc-btn:disabled { opacity: 0.28; cursor: not-allowed; }
+.rc-val {
+  width: 30px; text-align: center;
+  font-size: 0.85rem; font-weight: 700; color: var(--emerald);
+  border-top: 1.5px solid rgba(26,140,78,0.25); border-bottom: 1.5px solid rgba(26,140,78,0.25);
+  height: 28px; line-height: 28px;
+  background: var(--spring-wash);
+}
+
+.room-note {
+  background: var(--forest-mist);
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  padding: 0.75rem 0.9rem;
+  font-size: 0.72rem; color: var(--ink-soft); line-height: 1.85;
+}
+.room-note p + p { margin-top: 0.4rem; }
+
+/* ─── COUNT ROW ─── */
+.count-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem; }
+.count-duo > div > label { display: block; font-size: 0.69rem; color: var(--ink-muted); margin-bottom: 0.3rem; }
+input[type="number"] { text-align: center; }
+
+/* ─── BREAKFAST TOGGLE ─── */
+.bf-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.bf-opt {
+  display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 0.7rem 0.5rem;
+  cursor: pointer; font-size: 0.82rem; color: var(--ink-soft);
+  transition: all 0.18s; user-select: none;
+}
+.bf-opt input[type="radio"] { display: none; }
+.bf-opt:has(input:checked) {
+  border-color: var(--forest); background: var(--forest-wash); color: var(--forest-deep); font-weight: 500;
+}
+.bf-desc {
+  border-radius: 9px; padding: 0.65rem 0.85rem;
+  font-size: 0.72rem; line-height: 1.8;
+}
+.bf-desc-yes { background: #FEFAED; border: 1px solid var(--gold-border); color: #6A5020; }
+.bf-desc-no  { background: var(--forest-mist); border: 1px solid var(--border-light); color: var(--ink-soft); }
+
+/* ─── CONSENT ─── */
+.consent-list { display: flex; flex-direction: column; gap: 0.65rem; }
+.consent-item { display: flex; align-items: flex-start; gap: 0.6rem; cursor: pointer; }
+.consent-item input[type="checkbox"] { display: none; }
+.cbox {
+  width: 20px; height: 20px; flex-shrink: 0; margin-top: 0.05rem;
+  border: 2px solid var(--border); border-radius: 5px;
+  background: var(--cream);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.18s;
+}
+.consent-item:has(input:checked) .cbox {
+  background: var(--brand); border-color: var(--brand);
+}
+.consent-item:has(input:checked) .cbox::after {
+  content: '✓'; color: #fff; font-size: 0.73rem; font-weight: 700;
+}
+.consent-text { font-size: 0.78rem; color: var(--ink-soft); line-height: 1.72; }
+.consent-text strong { color: var(--forest-deep); }
+
+/* ─── WAIT NOTE ─── */
+.wait-note {
+  margin: 0 1rem;
+  background: var(--cream);
+  border: 1px solid var(--border-light);
+  border-radius: 12px; padding: 0.9rem 1rem;
+  text-align: center;
+  font-size: 0.74rem; color: var(--ink-soft); line-height: 1.85;
+}
+.wait-note strong { display: block; color: var(--forest-deep); font-size: 0.77rem; margin-bottom: 0.2rem; }
+
+/* ─── SUBMIT ─── */
+.submit-wrap { padding: 0 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.btn-submit {
+  width: 100%; padding: 1rem;
+  border: none; border-radius: 50px;
+  background: var(--emerald); color: #fff;
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1rem; font-weight: 600; letter-spacing: 0.14em;
+  cursor: pointer; transition: opacity 0.2s, transform 0.15s;
+  box-shadow: 0 6px 20px rgba(26,140,78,0.32);
+}
+.btn-submit:not(:disabled):active { transform: scale(0.985); }
+.btn-submit:disabled { background: #A0C4B0; box-shadow: none; cursor: not-allowed; }
+.submit-hint { text-align: center; font-size: 0.7rem; color: var(--ink-muted); }
+
+/* ─── GROUP INQUIRY ─── */
+.group-inquiry {
+  background: var(--cream);
+  border-radius: 14px;
+  border: 1.5px solid var(--gold-border);
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(46,80,69,0.07);
+  margin: 0 1rem 1rem;
+}
+.gi-header {
+  padding: 0.8rem 1.1rem;
+  background: var(--gold-dim);
+  border-bottom: 1px solid var(--gold-border);
+  font-size: 0.73rem; font-weight: 700; color: #6A5020; letter-spacing: 0.06em;
+}
+.gi-notice {
+  margin: 0.85rem 1rem 0;
+  background: #FEFAED;
+  border: 1px solid var(--gold-border);
+  border-radius: 9px; padding: 0.75rem 0.9rem;
+  font-size: 0.73rem; color: #5A4018; line-height: 1.85;
+}
+.gi-notice strong { color: #7A5820; }
+.gi-fields { padding: 0.85rem 1rem 1rem; display: flex; flex-direction: column; gap: 0.65rem; }
+.gi-row label { display: block; font-size: 0.75rem; font-weight: 500; color: var(--ink-soft); margin-bottom: 0.3rem; }
+.gi-req { font-size: 0.64rem; color: var(--error); margin-left: 0.2rem; }
+.gi-copy-btn {
+  width: 100%; padding: 0.8rem;
+  border: none; border-radius: 10px;
+  background: var(--gold); color: #5A3C00;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.9rem; font-weight: 700; cursor: pointer;
+  letter-spacing: 0.05em; transition: opacity 0.15s;
+}
+.gi-copy-btn:active { opacity: 0.8; }
+.gi-copy-hint { display: none; text-align: center; font-size: 0.72rem; color: var(--forest); margin-top: 0.35rem; }
+
+/* ─── FOOTER ─── */
+.copyright-footer {
+  text-align: center;
+  padding: 1.25rem 1rem 2.5rem;
+  font-size: 0.68rem; color: var(--ink-muted);
+  line-height: 1.95; opacity: 0.72;
+  border-top: 1px solid var(--border-light);
+  margin-top: 0.25rem;
+}
+
+/* ─── MODAL ─── */
+#overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(26,43,37,0.8); z-index: 200;
+  align-items: center; justify-content: center; padding: 1.5rem;
+}
+#overlay.show { display: flex; }
+.modal {
+  background: var(--cream); border-radius: 20px; padding: 2rem 1.5rem;
+  text-align: center; max-width: 320px; width: 100%;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.28);
+}
+.modal-icon { font-size: 2.8rem; margin-bottom: 0.65rem; }
+.modal h2 { font-family: 'Noto Serif TC', serif; font-size: 1.1rem; color: var(--ink); margin-bottom: 0.5rem; }
+.modal p  { font-size: 0.8rem; color: var(--ink-soft); line-height: 1.85; white-space: pre-line; }
+.modal-btn {
+  margin-top: 1.25rem; background: var(--emerald); color: #fff; border: none;
+  border-radius: 50px; padding: 0.72rem 2rem; font-size: 0.88rem; cursor: pointer;
+  font-family: 'Noto Sans TC', sans-serif; width: 100%;
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <!-- SVG leaf watermarks -->
+  <svg class="header-leaf" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M90 10 C80 10, 10 20, 10 90 C10 90, 40 50, 90 10Z" fill="white"/>
+    <path d="M90 10 L10 90" stroke="white" stroke-width="1.5"/>
+    <path d="M90 10 C70 30, 30 50, 10 90" stroke="white" stroke-width="1" fill="none"/>
+  </svg>
+  <svg class="header-leaf2" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M90 10 C80 10, 10 20, 10 90 C10 90, 40 50, 90 10Z" fill="white"/>
+    <path d="M90 10 L10 90" stroke="white" stroke-width="1.5"/>
+  </svg>
+
+  <div class="hotel-en">Together Hotel · Hualien · Zhong Shan</div>
+  <div class="hotel-name">一起一起旅店</div>
+  <div class="hotel-branch">花蓮中山館</div>
+  <div class="header-gem">
+    <div class="gem-line"></div>
+    <div class="gem-dot"></div>
+    <div class="gem-line"></div>
+  </div>
+  <div class="header-page">訂房需求詢價</div>
+</div>
+
+<!-- NOTICE -->
+<div class="notice">
+  <div class="notice-title">📋 詢價流程說明</div>
+  <ul>
+    <li>填寫需求 ➔ 專員確認房況並報價 ➔ 確認後匯款訂金</li>
+    <li><strong>匯款退費：</strong>若取消訂單，退款需約 1 個月，並扣除 30 元匯費</li>
+    <li><strong>免訂金推薦：</strong>官網預訂免匯款，僅需信用卡授權擔保，省時便利！</li>
+  </ul>
+</div>
+
+<form id="inquiryForm" novalidate>
+<div class="form-body">
+
+  <!-- 01 日期 -->
+  <div class="sec">
+    <div class="sec-head">
+      <div class="sec-tag">01</div>
+      <div class="sec-title">入住 ／ 退房日期</div>
+      <div class="sec-ghost">01</div>
+    </div>
+    <div class="sec-body">
+      <div>
+        <div class="date-duo">
+          <div>
+            <label>📅 入住日期</label>
+            <input type="date" id="checkIn" required>
+          </div>
+          <div>
+            <label>📅 退房日期</label>
+            <input type="date" id="checkOut" required>
+          </div>
+        </div>
+        <div class="nights-pill hidden" id="nightsBadge">🌙 <span id="nightsText">共 0 晚</span></div>
+        <div id="dateError" style="display:none;font-size:0.71rem;color:var(--error);margin-top:0.4rem;">⚠ 退房日期須晚於入住日期</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 聯絡資料 -->
+  <div class="sec">
+    <div class="sec-head">
+      <div class="sec-tag">02</div>
+      <div class="sec-title">聯絡資料</div>
+      <div class="sec-ghost">02</div>
+    </div>
+    <div class="sec-body">
+      <div>
+        <div class="f-label"><span>訂房姓名</span><span class="req">必填</span></div>
+        <input type="text" id="guestName" placeholder="請輸入訂房人姓名" required>
+      </div>
+      <div>
+        <div class="f-label"><span>聯絡電話</span><span class="req">必填</span></div>
+        <input type="tel" id="guestPhone" placeholder="請輸入手機號碼（09 開頭 10 碼）" required
+          maxlength="10"
+          oninput="this.value=this.value.replace(/[^0-9]/g,'');validatePhone(this,'phoneError')">
+        <div id="phoneError" style="display:none;font-size:0.71rem;color:var(--error);margin-top:0.35rem;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 需求房型 -->
+  <div class="sec">
+    <div class="sec-head">
+      <div class="sec-tag">03</div>
+      <div class="sec-title">需求房型</div>
+      <div class="sec-ghost">03</div>
+    </div>
+    <div class="sec-body">
+      <div>
+        <div class="f-label"><span>選擇房型與間數</span><span class="req">必填（可複選）</span></div>
+        <div class="hint" style="margin-bottom:0.65rem;color:#A04800;">⚠ 每種房型最多選 4 間。10 間以上請使用頁面底部「團體詢問」。</div>
+        <div class="room-grid" id="roomGrid"></div>
+      </div>
+      <div class="room-note">
+        <p>🏠 <strong>房況說明：</strong>各通路同步銷售，實際間數以當下房況為準。不足時專員將主動推薦其他合適房型。</p>
+        <p>💰 <strong>房價說明：</strong>本館採浮動房價，非固定金額。未即時下訂再詢問時將重新報價，建議符合預算盡速預訂。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 入住資訊 -->
+  <div class="sec">
+    <div class="sec-head">
+      <div class="sec-tag">04</div>
+      <div class="sec-title">入住資訊</div>
+      <div class="sec-ghost">04</div>
+    </div>
+    <div class="sec-body">
+      <div>
+        <div class="f-label"><span>入住人數</span><span class="req">必填</span></div>
+        <div class="count-duo">
+          <div>
+            <label>🧑 大人（人）</label>
+            <div style="display:flex;align-items:center;margin-top:0.3rem;">
+              <button type="button" class="rc-btn" id="adultMinus" onclick="changeGuest('adult',-1)" style="border-radius:6px 0 0 6px;">－</button>
+              <div class="rc-val" id="adultCount">1</div>
+              <button type="button" class="rc-btn" onclick="changeGuest('adult',1)" style="border-radius:0 6px 6px 0;">＋</button>
+            </div>
+          </div>
+          <div>
+            <label>🧒 小孩（人）</label>
+            <div style="display:flex;align-items:center;margin-top:0.3rem;">
+              <button type="button" class="rc-btn" id="childMinus" onclick="changeGuest('child',-1)" style="border-radius:6px 0 0 6px;">－</button>
+              <div class="rc-val" id="childCount">0</div>
+              <button type="button" class="rc-btn" onclick="changeGuest('child',1)" style="border-radius:0 6px 6px 0;">＋</button>
+            </div>
+          </div>
+        </div>
+        <div class="hint">每房限一位 12 歲以下小孩不佔床不收費（不提供額外備品），超出加收 500 元／人，不加床</div>
+      </div>
+      <div>
+        <div class="f-label"><span>訂房備註</span></div>
+        <textarea id="remarks" rows="3" placeholder="例：需要澡盆、嬰兒床或其他特殊需求…" style="resize:none;"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 須知確認 -->
+  <div class="sec">
+    <div class="sec-head">
+      <div class="sec-tag">05</div>
+      <div class="sec-title">入住須知確認</div>
+      <div class="sec-ghost">05</div>
+    </div>
+    <div class="sec-body">
+      <div class="consent-list">
+        <label class="consent-item">
+          <input type="checkbox" id="consent1">
+          <div class="cbox"></div>
+          <div class="consent-text">已知本館為<strong>環保旅店</strong>，續住期間不提供打掃服務，使用者付費</div>
+        </label>
+        <label class="consent-item">
+          <input type="checkbox" id="consent2">
+          <div class="cbox"></div>
+          <div class="consent-text">已知本館<strong>無提供車位</strong>，停車需求須自理</div>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="wait-note">
+    <strong>⏳ 溫馨提醒</strong>
+    服務人員有限，訊息送出後請耐心等候，<br>我們將盡快為您確認房況並回覆報價。
+  </div>
+
+  <div class="submit-wrap">
+    <button type="submit" class="btn-submit" id="submitBtn" disabled>送出訂房需求</button>
+    <div class="submit-hint">請確認勾選上方兩項須知後，方可送出</div>
+  </div>
+
+</div>
+</form>
+
+<!-- 團體詢問 -->
+<div class="group-inquiry">
+  <div class="gi-header">🏢 團體房間需求詢問（10 間以上）</div>
+  <div class="gi-notice">
+    <strong>⚠️ 10 間以上需求請以 Email 聯繫，由團體部門服務</strong><br>
+    服務時間：週一至週五 09:00–17:00，<strong>假日不回覆</strong>，一律以 Email 溝通。<br>
+    填妥以下資料後點擊複製，貼至對話框，以利櫃台人員協助轉達，務必留下 Email 以便報價。
+  </div>
+  <div class="gi-fields">
+    <div class="gi-row">
+      <label>聯絡姓名 <span class="gi-req">必填</span></label>
+      <input type="text" id="gi-name" placeholder="請輸入姓名">
+    </div>
+    <div class="gi-row">
+      <label>聯絡電話 <span class="gi-req">必填</span></label>
+      <input type="tel" id="gi-phone" placeholder="請輸入手機號碼">
+    </div>
+    <div class="gi-row">
+      <label>Email <span class="gi-req">必填・務必提供</span></label>
+      <input type="email" id="gi-email" placeholder="your@email.com">
+    </div>
+    <div class="gi-row">
+      <label>住宿日期 <span class="gi-req">必填</span></label>
+      <input type="text" id="gi-dates" placeholder="例：2025/08/15 入住，08/17 退房（共2晚）">
+    </div>
+    <div class="gi-row">
+      <label>入住人數</label>
+      <input type="text" id="gi-guests" placeholder="例：大人 10 人、小孩 2 人">
+    </div>
+    <div class="gi-row">
+      <label>房型需求</label>
+      <input type="text" id="gi-rooms" placeholder="例：雙人房 × 5、三人房 × 3">
+    </div>
+    <div class="gi-row">
+      <label>備註</label>
+      <textarea id="gi-note" rows="3" placeholder="其他需求或特殊說明…" style="resize:none;"></textarea>
+    </div>
+    <button type="button" class="gi-copy-btn" onclick="sendGroupInquiry()">📨 送出團體詢問</button>
+    <div class="gi-copy-hint" id="gi-copy-hint"></div>
+  </div>
+</div>
+
+<!-- 版權聲明 -->
+<div class="copyright-footer">
+  © 2026 一起一起旅店 花蓮中山館　All rights reserved.<br>
+  本頁面內容著作權歸一起一起旅店花蓮中山館所有，未經授權不得轉載或複製。
+</div>
+
+<!-- Modal Overlay -->
+<div id="overlay">
+  <div class="modal">
+    <div class="modal-icon" id="modalIcon">✅</div>
+    <h2 id="modalTitle">需求已送出！</h2>
+    <p id="modalBody"></p>
+    <button class="modal-btn" onclick="closeLiff()">我知道了</button>
+  </div>
+</div>
+
+<script>
+// ── 日期：禁選過去 ──
+(function() {
+  const today = new Date().toISOString().split("T")[0];
+  document.getElementById("checkIn").min  = today;
+  document.getElementById("checkOut").min = today;
+})();
+
+// ── 房型設定 ──
+const ROOM_TYPES = [
+  "標準單人房", "標準雙人房", "高級雙人房", "高級雙床房",
+  "行政雙人房", "高級三人房", "高級四人房"
+];
+const MAX_PER_ROOM = 4;
+const roomState = {};
+ROOM_TYPES.forEach(r => { roomState[r] = { checked: false, count: 1 }; });
+
+function renderRooms() {
+  const container = document.getElementById("roomGrid");
+  container.innerHTML = "";
+  ROOM_TYPES.forEach((name, idx) => {
+    const s = roomState[name];
+    const key = name.replace(/\s/g, '');
+    const isLast = idx === ROOM_TYPES.length - 1;
+    const isOdd  = ROOM_TYPES.length % 2 === 1;
+
+    const card = document.createElement("div");
+    card.className = `room-card${s.checked ? ' selected' : ''}${(isLast && isOdd) ? ' wide' : ''}`;
+    card.innerHTML = `
+      <div class="room-card-check">${s.checked ? '✓' : ''}</div>
+      <div class="room-card-name">${name}</div>
+      <div class="room-card-ctr" id="ctr_${key}">
+        <button type="button" class="rc-btn" id="btn_minus_${key}"
+          onclick="changeCount(event,'${name}',-1)"
+          ${s.count <= 1 ? 'disabled' : ''}>－</button>
+        <div class="rc-val">${s.count}</div>
+        <button type="button" class="rc-btn" id="btn_plus_${key}"
+          onclick="changeCount(event,'${name}',1)"
+          ${s.count >= MAX_PER_ROOM ? 'disabled' : ''}>＋</button>
+      </div>
+    `;
+    card.addEventListener('click', function(e) {
+      if (!e.target.classList.contains('rc-btn')) toggleRoom(name);
+    });
+    container.appendChild(card);
+  });
+}
+
+function toggleRoom(name) {
+  roomState[name].checked = !roomState[name].checked;
+  if (!roomState[name].checked) roomState[name].count = 1;
+  renderRooms();
+}
+
+function changeCount(e, name, delta) {
+  e.stopPropagation();
+  const s = roomState[name];
+  s.count = Math.max(1, Math.min(MAX_PER_ROOM, s.count + delta));
+  renderRooms();
+}
+renderRooms();
+
+// ── LIFF 初始化 ──
+const LIFF_ID = "YOUR_LIFF_ID_HERE";
+async function initLiff() {
+  try {
+    await liff.init({ liffId: LIFF_ID });
+    if (!liff.isLoggedIn()) liff.login({ redirectUri: location.href });
+  } catch (err) { console.warn("LIFF dev mode:", err); }
+}
+initLiff();
+
+// ── 人數計數器 ──
+let adultGuestCount = 1;
+let childGuestCount = 0;
+function changeGuest(type, delta) {
+  if (type === 'adult') {
+    adultGuestCount = Math.max(1, Math.min(20, adultGuestCount + delta));
+    document.getElementById("adultCount").textContent = adultGuestCount;
+    document.getElementById("adultMinus").disabled = adultGuestCount <= 1;
+  } else {
+    childGuestCount = Math.max(0, Math.min(10, childGuestCount + delta));
+    document.getElementById("childCount").textContent = childGuestCount;
+    document.getElementById("childMinus").disabled = childGuestCount <= 0;
+  }
+}
+document.getElementById("adultMinus").disabled = true;
+document.getElementById("childMinus").disabled = true;
+
+// ── 電話防呆 ──
+function validatePhone(input, errId) {
+  const val = input.value;
+  const err = document.getElementById(errId);
+  if (val.length === 0) { err.style.display = "none"; return; }
+  let msg = "";
+  if (!val.startsWith("09"))   msg = "⚠ 手機號碼須以 09 開頭";
+  else if (val.length < 10)    msg = `⚠ 號碼太短，目前 ${val.length} 碼，需 10 碼`;
+  if (msg) { err.textContent = msg; err.style.display = "block"; }
+  else { err.style.display = "none"; }
+}
+
+// ── 日期計算 ──
+function calcNights() {
+  const ci  = document.getElementById("checkIn").value;
+  const co  = document.getElementById("checkOut").value;
+  const badge = document.getElementById("nightsBadge");
+  const err   = document.getElementById("dateError");
+  if (ci && co) {
+    const diff = Math.round((new Date(co) - new Date(ci)) / 86400000);
+    if (diff <= 0) {
+      err.style.display = "block"; badge.classList.add("hidden");
+    } else {
+      err.style.display = "none";
+      document.getElementById("nightsText").textContent = `共 ${diff} 晚`;
+      badge.classList.remove("hidden");
+    }
+  } else {
+    badge.classList.add("hidden"); err.style.display = "none";
+  }
+}
+document.getElementById("checkIn").addEventListener("change", function() {
+  const ci = this.value;
+  if (ci) {
+    const next = new Date(ci);
+    next.setDate(next.getDate() + 1);
+    document.getElementById("checkOut").min = next.toISOString().split("T")[0];
+    const co = document.getElementById("checkOut").value;
+    if (co && co <= ci) document.getElementById("checkOut").value = "";
+  }
+  calcNights();
+});
+document.getElementById("checkOut").addEventListener("change", calcNights);
+
+// ── 送出按鈕狀態 ──
+function updateSubmitState() {
+  const c1 = document.getElementById("consent1").checked;
+  const c2 = document.getElementById("consent2").checked;
+  document.getElementById("submitBtn").disabled = !(c1 && c2);
+}
+document.getElementById("consent1").addEventListener("change", updateSubmitState);
+document.getElementById("consent2").addEventListener("change", updateSubmitState);
+
+// ── 表單送出 ──
+document.getElementById("inquiryForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const checkIn   = document.getElementById("checkIn").value;
+  const checkOut  = document.getElementById("checkOut").value;
+  const name      = document.getElementById("guestName").value.trim();
+  const phone     = document.getElementById("guestPhone").value.trim();
+  const adults    = adultGuestCount;
+  const children  = childGuestCount;
+  const remarks   = document.getElementById("remarks").value.trim();
+  const selectedRooms = ROOM_TYPES.filter(r => roomState[r].checked);
+  const roomSummary   = selectedRooms.map(r => `${r} × ${roomState[r].count}間`).join("、");
+
+  const errors = [];
+  if (!checkIn)  errors.push("請選擇入住日期");
+  if (!checkOut) errors.push("請選擇退房日期");
+  if (checkIn && checkOut && new Date(checkOut) <= new Date(checkIn)) errors.push("退房日期須晚於入住日期");
+  if (!name)     errors.push("請輸入訂房姓名");
+  if (!phone)    errors.push("請輸入聯絡電話");
+  else if (!/^09\d{8}$/.test(phone)) errors.push("手機號碼格式不正確（需為 09 開頭 10 碼）");
+  if (selectedRooms.length === 0) errors.push("請至少選擇一種需求房型");
+  if (adults < 1) errors.push("請輸入大人人數（至少 1 人）");
+
+  if (errors.length > 0) {
+    showModal("⚠️", "請確認必填欄位", errors.map(v => `• ${v}`).join("\n"));
+    return;
+  }
+
+  const nights = Math.round((new Date(checkOut) - new Date(checkIn)) / 86400000);
+  const msg = [
+    "🏨【訂房需求詢價】一起一起旅店 花蓮中山館",
+    "─────────────────",
+    `📅 入住日期：${checkIn}`,
+    `📅 退房日期：${checkOut}（共 ${nights} 晚）`,
+    `👤 訂房姓名：${name}`,
+    `📞 聯絡電話：${phone}`,
+    "─────────────────",
+    `🛏 需求房型：${roomSummary}`,
+    `👥 入住人數：大人 ${adults} 人／小孩 ${children} 人`,
+    remarks ? `📝 訂房備註：${remarks}` : null,
+    "─────────────────",
+    "✅ 已知悉環保旅店政策（續住不打掃）",
+    "✅ 已知悉本館無提供停車位",
+    "─────────────────",
+    "以上為訂房需求，請協助確認空房與報價，謝謝！",
+  ].filter(Boolean).join("\n");
+
+  const btn = document.getElementById("submitBtn");
+  btn.disabled = true; btn.textContent = "傳送中…";
+
+  try {
+    if (liff.isInClient()) {
+      await liff.sendMessages([{ type: "text", text: msg }]);
+      showModal("✅", "需求已送出！", "您的訂房需求已傳送至聊天室。\n\n請耐心等候，專員將盡快與您確認空房狀況並回覆報價。");
+    } else {
+      console.log("【訊息預覽】\n" + msg);
+      showModal("🔧", "開發模式預覽", "此頁面需在 LINE App 中開啟才能實際送出。\n\n訊息內容已輸出至 Console。");
+      btn.disabled = false; btn.textContent = "送出訂房需求"; updateSubmitState();
+    }
+  } catch (err) {
+    console.error(err);
+    btn.disabled = false; btn.textContent = "送出訂房需求"; updateSubmitState();
+    showModal("❌", "送出失敗", `請稍後再試或直接聯繫專員。\n\n錯誤：${err.message}`);
+  }
+});
+
+// ── 團體詢問送出 ──
+async function sendGroupInquiry() {
+  const name   = document.getElementById("gi-name").value.trim();
+  const phone  = document.getElementById("gi-phone").value.trim();
+  const email  = document.getElementById("gi-email").value.trim();
+  const dates  = document.getElementById("gi-dates").value.trim();
+  const guests = document.getElementById("gi-guests").value.trim();
+  const rooms  = document.getElementById("gi-rooms").value.trim();
+  const note   = document.getElementById("gi-note").value.trim();
+  const hint   = document.getElementById("gi-copy-hint");
+
+  if (!name || !phone || !email || !dates) {
+    hint.style.color = "var(--error)";
+    hint.textContent = "⚠ 請至少填寫：聯絡姓名、聯絡電話、Email 與住宿日期";
+    hint.style.display = "block";
+    return;
+  }
+
+  const content = [
+    "【團體訂房需求詢問】一起一起旅店 花蓮中山館",
+    "─────────────────",
+    `聯絡姓名：${name}`,
+    `聯絡電話：${phone}`,
+    `Email　：${email}`,
+    `住宿日期：${dates}`,
+    guests ? `入住人數：${guests}` : null,
+    rooms  ? `房型需求：${rooms}`  : null,
+    note   ? `備　　註：${note}`   : null,
+    "─────────────────",
+    "以上為團體訂房需求，請協助報價，謝謝！",
+  ].filter(Boolean).join("\n");
+
+  const btn = document.querySelector(".gi-copy-btn");
+  btn.disabled = true; btn.textContent = "傳送中…";
+
+  try {
+    if (liff.isInClient()) {
+      await liff.sendMessages([{ type: "text", text: content }]);
+      hint.style.color = "var(--forest)";
+      hint.textContent = "✅ 團體詢問已送出！請耐心等候，專員將於服務時間內回覆。";
+    } else {
+      console.log("【團體詢問預覽】\n" + content);
+      hint.style.color = "var(--forest)";
+      hint.textContent = "🔧 開發模式：訊息已輸出至 Console";
+    }
+    hint.style.display = "block";
+  } catch (err) {
+    hint.style.color = "var(--error)";
+    hint.textContent = "❌ 送出失敗，請稍後再試";
+    hint.style.display = "block";
+  } finally {
+    btn.disabled = false; btn.textContent = "📨 送出團體詢問";
+  }
+}
+
+// ── Modal 控制 ──
+function showModal(icon, title, body) {
+  document.getElementById("modalIcon").textContent  = icon;
+  document.getElementById("modalTitle").textContent = title;
+  document.getElementById("modalBody").textContent  = body;
+  document.getElementById("overlay").classList.add("show");
+}
+function closeLiff() {
+  document.getElementById("overlay").classList.remove("show");
+  if (document.getElementById("modalTitle").textContent === "需求已送出！") {
+    try { liff.closeWindow(); } catch(e) { window.close(); }
+  }
+}
+</script>
+</body>
+</html>

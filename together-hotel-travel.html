@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="zh-TW" id="html-root">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一起一起花蓮遊 Together Fun With Hualien</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #3DC96A;
+    --deep-green: #1A8C4E;
+    --mint: #E8F9EF;
+    --mint-dark: #C8EDD8;
+    --white: #FFFFFF;
+    --text: #1E2D22;
+    --text-muted: #5A7060;
+    --card-radius: 18px;
+    --shadow: 0 4px 20px rgba(61,201,106,0.10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: var(--mint);
+    color: var(--text);
+    max-width: 480px;
+    margin: 0 auto;
+    padding-bottom: 40px;
+  }
+
+  /* ── LANG SWITCHER ── */
+  .lang-bar {
+    background: var(--deep-green);
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: flex-end;
+  }
+  .lang-bar span {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.70);
+    margin-right: 4px;
+  }
+  .lang-btn {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.30);
+    color: var(--white);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: background 0.18s;
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+  .lang-btn:hover, .lang-btn.active {
+    background: var(--green);
+    border-color: var(--green);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(160deg, var(--deep-green) 0%, var(--green) 100%);
+    padding: 18px 24px 28px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 28px;
+    background: var(--mint);
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+  .hero-duck {
+    font-size: 1.8rem;
+    display: inline;
+    margin-right: 6px;
+    animation: waddle 2.4s ease-in-out infinite;
+    vertical-align: middle;
+  }
+  @keyframes waddle {
+    0%,100% { transform: rotate(-6deg); }
+    50%      { transform: rotate(6deg); }
+  }
+  .hero h1 {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.3;
+    letter-spacing: 0.02em;
+  }
+  .hero h1 span { display: block; font-size: 1rem; font-weight: 500; opacity: 0.88; margin-top: 4px; }
+  .hero-sub {
+    margin-top: 10px;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.80);
+    background: rgba(255,255,255,0.15);
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+  }
+
+  /* ── NAV TABS ── */
+  .nav-tabs {
+    display: flex;
+    gap: 8px;
+    padding: 16px 16px 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    flex-shrink: 0;
+    background: var(--white);
+    border: 1.5px solid var(--mint-dark);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--deep-green);
+    text-decoration: none;
+    transition: background 0.18s, color 0.18s;
+  }
+  .nav-tab:hover, .nav-tab:active {
+    background: var(--green);
+    color: var(--white);
+    border-color: var(--green);
+  }
+
+  /* ── SECTION CARD ── */
+  .section-card {
+    background: var(--white);
+    border-radius: var(--card-radius);
+    margin: 14px 14px 0;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .section-header {
+    background: var(--green);
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-header .icon { font-size: 1.4rem; }
+  .section-header h2 {
+    font-size: 1.05rem;
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.2;
+  }
+  .section-header h2 small {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 500;
+    opacity: 0.88;
+    margin-top: 1px;
+  }
+  .section-body { padding: 18px 18px 20px; }
+
+  /* ── WHALE WATCHING ── */
+  .time-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4px 12px;
+    font-size: 0.88rem;
+    margin-bottom: 14px;
+  }
+  .time-label { color: var(--text-muted); font-weight: 700; white-space: nowrap; }
+  .time-value { font-weight: 500; }
+
+  /* warning banner */
+  .warn-banner {
+    background: #FFF8E1;
+    border: 1.5px solid #F9C74F;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.8rem;
+    color: #7A5500;
+    line-height: 1.7;
+    margin-bottom: 14px;
+  }
+  .warn-banner strong { color: #5C3D00; }
+
+  .price-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    font-size: 0.88rem;
+    margin-bottom: 14px;
+  }
+  .price-table thead tr { background: var(--deep-green); }
+  .price-table thead th {
+    color: var(--white);
+    font-weight: 700;
+    padding: 8px 0;
+    text-align: center;
+  }
+  .price-table tbody tr { background: var(--mint); }
+  .price-table tbody td {
+    padding: 10px 0;
+    text-align: center;
+    font-weight: 700;
+    color: var(--deep-green);
+    font-size: 1rem;
+    border-top: 2px solid var(--white);
+  }
+
+  .note-list { list-style: none; padding: 0; }
+  .note-list li {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    padding: 4px 0 4px 22px;
+    position: relative;
+    line-height: 1.55;
+  }
+  .note-list li::before {
+    position: absolute; left: 0; top: 4px;
+    font-size: 0.82rem;
+  }
+  .note-list li:nth-child(1)::before { content: '🌊'; }
+  .note-list li:nth-child(2)::before { content: '⏰'; }
+  .note-list li:nth-child(3)::before { content: '🐬'; }
+
+  .price-note {
+    background: var(--mint);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.8rem;
+    color: var(--deep-green);
+    margin-top: 10px;
+    line-height: 1.7;
+  }
+
+  /* ── CHARTER ── */
+  .route-card {
+    border: 1.5px solid var(--mint-dark);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+  }
+  .route-card:last-of-type { margin-bottom: 0; }
+  .route-title {
+    font-size: 0.95rem;
+    font-weight: 900;
+    color: var(--deep-green);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .route-stops {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .route-prices {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .price-chip {
+    background: var(--mint);
+    border-radius: 10px;
+    padding: 8px 10px;
+    text-align: center;
+  }
+  .price-chip .seat { font-size: 0.75rem; color: var(--text-muted); font-weight: 700; }
+  .price-chip .amount { font-size: 1.1rem; font-weight: 900; color: var(--deep-green); }
+  .price-chip .unit { font-size: 0.7rem; color: var(--text-muted); }
+  .charter-note {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 12px;
+    line-height: 1.7;
+    padding: 10px 12px;
+    background: var(--mint);
+    border-radius: 10px;
+  }
+  .charter-note strong { color: var(--deep-green); }
+
+  /* ── BUS ── */
+  .bus-route {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--mint-dark);
+  }
+  .bus-route:last-of-type { border-bottom: none; }
+  .bus-badge {
+    background: var(--green);
+    color: var(--white);
+    font-size: 0.75rem;
+    font-weight: 900;
+    border-radius: 8px;
+    padding: 4px 9px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 1px;
+    min-width: 46px;
+    text-align: center;
+  }
+  .bus-info { flex: 1; }
+  .bus-name { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+  .bus-stops { font-size: 0.76rem; color: var(--text-muted); line-height: 1.55; }
+  .bus-freq { font-size: 0.72rem; color: var(--text-muted); margin-top: 3px; }
+  .bus-freq strong { color: var(--deep-green); }
+  .bus-highlight { color: var(--deep-green); font-weight: 700; }
+  .bus-note {
+    margin-top: 12px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    background: var(--mint);
+    border-radius: 10px;
+    padding: 10px 12px;
+    line-height: 1.65;
+  }
+
+  /* ── TAXI ── */
+  .taxi-list { display: flex; flex-direction: column; gap: 10px; }
+  .taxi-card {
+    background: var(--mint);
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .taxi-name { font-size: 0.9rem; font-weight: 700; color: var(--text); }
+  .taxi-number { font-size: 0.82rem; color: var(--text-muted); margin-top: 2px; }
+  .call-btn {
+    background: var(--green);
+    color: var(--white);
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background 0.18s;
+  }
+  .call-btn:hover { background: var(--deep-green); }
+
+  /* ── PARKING ── */
+  .parking-block {
+    border-left: 3px solid var(--green);
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    background: var(--mint);
+    border-radius: 0 10px 10px 0;
+  }
+  .parking-block:last-child { margin-bottom: 0; }
+  .parking-label {
+    font-size: 0.8rem;
+    font-weight: 900;
+    color: var(--deep-green);
+    margin-bottom: 4px;
+  }
+  .parking-block p {
+    font-size: 0.83rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+  .parking-block strong { color: var(--text); }
+
+  .hero-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    justify-content: center;
+  }
+  .hero-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.18);
+    border: 1.5px solid rgba(255,255,255,0.45);
+    color: var(--white);
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 10px 16px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-family: 'Noto Sans TC', sans-serif;
+    transition: background 0.18s;
+    flex: 1;
+    justify-content: center;
+    max-width: 160px;
+  }
+  .hero-action-btn:hover, .hero-action-btn:active {
+    background: rgba(255,255,255,0.30);
+  }
+  .hero-action-btn .btn-sub {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 400;
+    opacity: 0.85;
+    margin-top: 1px;
+  }
+
+
+  .nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--green);
+    color: var(--white);
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 14px 20px;
+    border-radius: 14px;
+    text-decoration: none;
+    margin: 14px 14px 0;
+    box-shadow: 0 4px 14px rgba(61,201,106,0.25);
+    transition: background 0.18s, transform 0.12s;
+  }
+  .nav-btn:hover, .nav-btn:active { background: var(--deep-green); transform: translateY(-1px); }
+  .nav-btn .nav-btn-sub {
+    font-size: 0.72rem;
+    font-weight: 400;
+    opacity: 0.88;
+    display: block;
+    margin-top: 1px;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    padding: 28px 20px 16px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.9;
+  }
+  .footer .duck-row { font-size: 1.4rem; margin-bottom: 8px; }
+  .footer .footer-name { font-size: 0.85rem; font-weight: 700; color: var(--deep-green); }
+  .footer .footer-divider {
+    border: none;
+    border-top: 1px solid var(--mint-dark);
+    margin: 10px auto;
+    width: 80%;
+  }
+  .footer .copyright { font-size: 0.72rem; color: #8FA896; }
+
+  /* ── TRANSLATION OVERLAY (hidden content per lang) ── */
+  [data-lang] { display: none; }
+  .lang-zh [data-lang="zh"],
+  .lang-en [data-lang="en"],
+  .lang-ja [data-lang="ja"],
+  .lang-ko [data-lang="ko"] { display: inline; }
+
+  /* block-level translated elements */
+  [data-lang-block] { display: none; }
+  .lang-zh [data-lang-block="zh"],
+  .lang-en [data-lang-block="en"],
+  .lang-ja [data-lang-block="ja"],
+  .lang-ko [data-lang-block="ko"] { display: block; }
+</style>
+</head>
+<body class="lang-zh">
+
+<!-- LANGUAGE SWITCHER -->
+<div class="lang-bar">
+  <span>🌐</span>
+  <button class="lang-btn active" onclick="setLang('zh')">中文</button>
+  <button class="lang-btn" onclick="setLang('en')">EN</button>
+  <button class="lang-btn" onclick="setLang('ja')">日本語</button>
+  <button class="lang-btn" onclick="setLang('ko')">한국어</button>
+</div>
+
+<!-- HERO -->
+<header class="hero">
+  <h1><span class="hero-duck">🦆</span> 一起一起花蓮遊<span>Together Fun With Hualien</span></h1>
+  <p class="hero-sub">一起一起鴨！給你自由發揮的旅程 🌿</p>
+  <div class="hero-actions">
+    <a class="hero-action-btn" href="https://maps.google.com/?q=花蓮縣花蓮市民族里中山路101號" target="_blank">
+      <span>📍</span>
+      <span>
+        <span data-lang="zh">一鍵導航</span>
+        <span data-lang="en">Navigate</span>
+        <span data-lang="ja">ナビ</span>
+        <span data-lang="ko">길 찾기</span>
+        <span class="btn-sub">花蓮縣花蓮市中山路101號</span>
+      </span>
+    </a>
+    <a class="hero-action-btn" href="tel:038333152">
+      <span>📞</span>
+      <span>
+        <span data-lang="zh">致電旅店</span>
+        <span data-lang="en">Call Hotel</span>
+        <span data-lang="ja">電話する</span>
+        <span data-lang="ko">전화하기</span>
+        <span class="btn-sub">03-833-3152</span>
+      </span>
+    </a>
+  </div>
+</header>
+
+<!-- NAV TABS -->
+<nav class="nav-tabs" aria-label="快速導覽">
+  <a class="nav-tab" href="#whale">🐳
+    <span data-lang="zh">賞鯨</span><span data-lang="en">Whale</span><span data-lang="ja">鯨観察</span><span data-lang="ko">고래관람</span>
+  </a>
+  <a class="nav-tab" href="#charter">🚐
+    <span data-lang="zh">包車</span><span data-lang="en">Charter</span><span data-lang="ja">チャーター</span><span data-lang="ko">전세차</span>
+  </a>
+  <a class="nav-tab" href="#bus">🚌
+    <span data-lang="zh">公車</span><span data-lang="en">Bus</span><span data-lang="ja">バス</span><span data-lang="ko">버스</span>
+  </a>
+  <a class="nav-tab" href="#taxi">🚕
+    <span data-lang="zh">計程車</span><span data-lang="en">Taxi</span><span data-lang="ja">タクシー</span><span data-lang="ko">택시</span>
+  </a>
+  <a class="nav-tab" href="#parking">🅿️
+    <span data-lang="zh">停車</span><span data-lang="en">Parking</span><span data-lang="ja">駐車場</span><span data-lang="ko">주차</span>
+  </a>
+</nav>
+
+<!-- ① WHALE WATCHING -->
+<section class="section-card" id="whale">
+  <div class="section-header">
+    <span class="icon">🐳</span>
+    <h2>
+      <span data-lang="zh">夏日賞鯨船</span><span data-lang="en">Whale Watching</span><span data-lang="ja">ホエールウォッチング</span><span data-lang="ko">고래관람 투어</span>
+      <small>Whale Watching</small>
+    </h2>
+  </div>
+  <div class="section-body">
+
+    <!-- ⚠️ 重要注意 -->
+    <div class="warn-banner">
+      <strong>
+        <span data-lang="zh">⚠️ 出發前請注意</span>
+        <span data-lang="en">⚠️ Before You Book</span>
+        <span data-lang="ja">⚠️ ご予約前に</span>
+        <span data-lang="ko">⚠️ 예약 전 주의사항</span>
+      </strong><br>
+      <span data-lang="zh">
+        航班時間請先洽櫃台，船班時間會依據海況有所調整。<br>
+        以下時間<strong>僅供參考</strong>，以實際出航為準。<br>
+        📋 報名時間為<strong>下午五點以前</strong><br>
+        🚫 已報名後<strong>不退費</strong>，請確認後再報名。
+      </span>
+      <span data-lang="en">
+        Please check with the front desk for the latest schedule — departure times vary with sea conditions.<br>
+        Times listed below are <strong>for reference only</strong>.<br>
+        📋 Registration closes at <strong>5:00 PM</strong> daily.<br>
+        🚫 <strong>No refunds</strong> after registration — please confirm before booking.
+      </span>
+      <span data-lang="ja">
+        出発時刻は海況により変動します。事前にフロントへご確認ください。<br>
+        以下の時刻は<strong>参考値</strong>です。<br>
+        📋 申し込み締め切りは毎日<strong>午後5時</strong>まで。<br>
+        🚫 申し込み後の<strong>返金不可</strong>、ご確認の上お申し込みください。
+      </span>
+      <span data-lang="ko">
+        출발 시간은 해상 상황에 따라 변경될 수 있습니다. 프런트에 먼저 확인하세요.<br>
+        아래 시간은 <strong>참고용</strong>입니다.<br>
+        📋 접수 마감은 매일 <strong>오후 5시</strong>까지.<br>
+        🚫 접수 후 <strong>환불 불가</strong>이오니 확인 후 신청하세요.
+      </span>
+    </div>
+
+    <div class="time-grid">
+      <span class="time-label">
+        <span data-lang="zh">上午航班</span><span data-lang="en">Morning</span><span data-lang="ja">午前便</span><span data-lang="ko">오전 출항</span>
+      </span>
+      <span class="time-value">06:00 ／ 08:00 ／ 10:00</span>
+      <span class="time-label">
+        <span data-lang="zh">下午航班</span><span data-lang="en">Afternoon</span><span data-lang="ja">午後便</span><span data-lang="ko">오후 출항</span>
+      </span>
+      <span class="time-value">13:30 ／ 15:00</span>
+    </div>
+
+    <table class="price-table">
+      <thead>
+        <tr>
+          <th>
+            <span data-lang="zh">成人 ADT</span><span data-lang="en">Adult</span><span data-lang="ja">大人</span><span data-lang="ko">성인</span>
+          </th>
+          <th>
+            <span data-lang="zh">孩童 CHD</span><span data-lang="en">Child</span><span data-lang="ja">子ども</span><span data-lang="ko">어린이</span>
+          </th>
+          <th>
+            <span data-lang="zh">嬰兒 INF</span><span data-lang="en">Infant</span><span data-lang="ja">幼児</span><span data-lang="ko">유아</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>NT$ 900</td>
+          <td>NT$ 700</td>
+          <td>NT$ 300</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ul class="note-list">
+      <li>
+        <span data-lang="zh">船位有限，以實際出航為準，請事先詢問</span>
+        <span data-lang="en">Limited seats — confirm availability before visiting</span>
+        <span data-lang="ja">定員あり。事前にご確認ください</span>
+        <span data-lang="ko">좌석 제한 있음. 사전에 확인하세요</span>
+      </li>
+      <li>
+        <span data-lang="zh">請提早 30 分鐘到達賞鯨碼頭，完成安全示範說明及點名登船</span>
+        <span data-lang="en">Arrive 30 minutes early at the pier for safety briefing and roll call</span>
+        <span data-lang="ja">乗船30分前に到着し、安全説明と点呼を受けてください</span>
+        <span data-lang="ko">출항 30분 전에 선착장 도착하여 안전 교육 및 점호 참여</span>
+      </li>
+      <li>
+        <span data-lang="zh">花蓮夏季賞豚率高達 90%，鯨魚 7–8 月最易出沒，祝大家都能看到鯨魚！</span>
+        <span data-lang="en">90% dolphin sighting rate in summer! Whales are most common in July–August 🐋</span>
+        <span data-lang="ja">夏はイルカの目撃率90%！クジラは7〜8月が最も多い 🐋</span>
+        <span data-lang="ko">여름 돌고래 목격률 90%! 고래는 7~8월이 최적 시즌 🐋</span>
+      </li>
+    </ul>
+
+    <div class="price-note">
+      💊
+      <span data-lang="zh">搭船前請自備暈船藥提前服下</span>
+      <span data-lang="en">Bring seasickness medicine and take it before boarding</span>
+      <span data-lang="ja">乗船前に酔い止め薬をご準備ください</span>
+      <span data-lang="ko">승선 전 멀미약을 미리 준비하세요</span>
+      <br>🕐
+      <span data-lang="zh">整體行程約 2 小時，依實際風浪及鯨豚觀察情況調整</span>
+      <span data-lang="en">Tour duration approx. 2 hours, subject to sea & wildlife conditions</span>
+      <span data-lang="ja">所要時間約2時間（海況・生物観察状況により変動）</span>
+      <span data-lang="ko">전체 소요 약 2시간 (해상 상황에 따라 변동)</span>
+      <br>✅
+      <span data-lang="zh">價格含接送、導覽、意外險　報名請洽櫃檯人員</span>
+      <span data-lang="en">Price includes transfer, guide & accident insurance. Register at front desk</span>
+      <span data-lang="ja">送迎・ガイド・傷害保険込み。フロントにてお申し込みを</span>
+      <span data-lang="ko">가격에 이동, 가이드, 상해보험 포함. 프런트에서 신청</span>
+    </div>
+  </div>
+</section>
+
+<!-- ② CHARTER TOUR -->
+<section class="section-card" id="charter">
+  <div class="section-header">
+    <span class="icon">🚐</span>
+    <h2>
+      <span data-lang="zh">包車旅遊</span><span data-lang="en">Private Charter</span><span data-lang="ja">チャーターツアー</span><span data-lang="ko">전세 투어</span>
+      <small>Private Charter Tour</small>
+    </h2>
+  </div>
+  <div class="section-body">
+
+    <div class="route-card">
+      <div class="route-title">🌊
+        <span data-lang="zh">花蓮海岸線</span>
+        <span data-lang="en">Hualien Coastal Route</span>
+        <span data-lang="ja">花蓮海岸線</span>
+        <span data-lang="ko">화롄 해안선 코스</span>
+      </div>
+      <div class="route-stops">
+        <span data-lang="zh">飯店出發 ▸ 洄瀾貨櫃星巴克 ▸ 蕃薯寮 ▸ 芭崎瞭望台 ▸ 大石鼻山步道 ▸ 新社梯田 ▸ 石門洞 ▸ 石梯坪風景區 ▸ 賦歸</span>
+        <span data-lang="en">Hotel Depart ▸ Huiluan Container Starbucks ▸ Fanshu Liao ▸ Baji Lookout ▸ Da Shíbí Trail ▸ Xinsha Terraces ▸ Shimen Cave ▸ Shitíping Scenic Area ▸ Return</span>
+        <span data-lang="ja">ホテル出発 ▸ 廻瀾コンテナスタバ ▸ 蕃薯寮 ▸ 芭崎展望台 ▸ 大石鼻山歩道 ▸ 新社棚田 ▸ 石門洞 ▸ 石梯坪風景区 ▸ 帰還</span>
+        <span data-lang="ko">호텔 출발 ▸ 후이란 컨테이너 스타벅스 ▸ 판수랴오 ▸ 바지 전망대 ▸ 다스비 등산로 ▸ 신사 계단식 논 ▸ 스먼 동굴 ▸ 스티핑 풍경구 ▸ 귀환</span>
+      </div>
+      <div class="route-prices">
+        <div class="price-chip">
+          <div class="seat">
+            <span data-lang="zh">5 人座</span><span data-lang="en">5-Seat</span><span data-lang="ja">5人乗り</span><span data-lang="ko">5인승</span>
+          </div>
+          <div class="amount">
+            <span data-lang="zh">$3,500起</span>
+            <span data-lang="en">From $3,500</span>
+            <span data-lang="ja">$3,500〜</span>
+            <span data-lang="ko">$3,500부터</span>
+          </div>
+          <div class="unit">
+            <span data-lang="zh">一日遊 8hr</span><span data-lang="en">Full Day 8hr</span><span data-lang="ja">終日 8時間</span><span data-lang="ko">1일 8시간</span>
+          </div>
+        </div>
+        <div class="price-chip">
+          <div class="seat">
+            <span data-lang="zh">9 人座</span><span data-lang="en">9-Seat</span><span data-lang="ja">9人乗り</span><span data-lang="ko">9인승</span>
+          </div>
+          <div class="amount">
+            <span data-lang="zh">$5,000起</span>
+            <span data-lang="en">From $5,000</span>
+            <span data-lang="ja">$5,000〜</span>
+            <span data-lang="ko">$5,000부터</span>
+          </div>
+          <div class="unit">
+            <span data-lang="zh">一日遊 8hr</span><span data-lang="en">Full Day 8hr</span><span data-lang="ja">終日 8時間</span><span data-lang="ko">1일 8시간</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="route-card">
+      <div class="route-title">🏔️
+        <span data-lang="zh">花蓮縱谷線</span>
+        <span data-lang="en">Hualien Rift Valley Route</span>
+        <span data-lang="ja">花蓮縦谷線</span>
+        <span data-lang="ko">화롄 리프트 밸리 코스</span>
+      </div>
+      <div class="route-stops">
+        <span data-lang="zh">飯店出發 ▸ 理想星巴克（或鯉魚潭）▸ 雲山水 ▸ 林田山林業文化園區 ▸ 吉利潭 ▸ 光復糖廠 ▸ 賦歸</span>
+        <span data-lang="en">Hotel Depart ▸ Ideal Starbucks (or Liyu Lake) ▸ Yunshan Water ▸ Lintian Mountain Forestry Culture Park ▸ Jili Lake ▸ Guangfu Sugar Factory ▸ Return</span>
+        <span data-lang="ja">ホテル出発 ▸ 理想スターバックス（または鯉魚潭）▸ 雲山水 ▸ 林田山林業文化園区 ▸ 吉利潭 ▸ 光復糖廠 ▸ 帰還</span>
+        <span data-lang="ko">호텔 출발 ▸ 이상 스타벅스(또는 리위 호수) ▸ 윈산수이 ▸ 린티안산 임업문화원구 ▸ 지리 호수 ▸ 광푸 설탕공장 ▸ 귀환</span>
+      </div>
+      <div class="route-prices">
+        <div class="price-chip">
+          <div class="seat">
+            <span data-lang="zh">5 人座</span><span data-lang="en">5-Seat</span><span data-lang="ja">5人乗り</span><span data-lang="ko">5인승</span>
+          </div>
+          <div class="amount">
+            <span data-lang="zh">$3,500起</span>
+            <span data-lang="en">From $3,500</span>
+            <span data-lang="ja">$3,500〜</span>
+            <span data-lang="ko">$3,500부터</span>
+          </div>
+          <div class="unit">
+            <span data-lang="zh">一日遊 8hr</span><span data-lang="en">Full Day 8hr</span><span data-lang="ja">終日 8時間</span><span data-lang="ko">1일 8시간</span>
+          </div>
+        </div>
+        <div class="price-chip">
+          <div class="seat">
+            <span data-lang="zh">9 人座</span><span data-lang="en">9-Seat</span><span data-lang="ja">9人乗り</span><span data-lang="ko">9인승</span>
+          </div>
+          <div class="amount">
+            <span data-lang="zh">$5,000起</span>
+            <span data-lang="en">From $5,000</span>
+            <span data-lang="ja">$5,000〜</span>
+            <span data-lang="ko">$5,000부터</span>
+          </div>
+          <div class="unit">
+            <span data-lang="zh">一日遊 8hr</span><span data-lang="en">Full Day 8hr</span><span data-lang="ja">終日 8時間</span><span data-lang="ko">1일 8시간</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="charter-note">
+      📝
+      <span data-lang="zh">以上行程僅供參考，可在合理範圍內調整，歡迎客製化。</span>
+      <span data-lang="en">Itineraries above are for reference — adjustments within reason are welcome. Customization available.</span>
+      <span data-lang="ja">上記の行程は参考です。合理的な範囲内での調整・カスタマイズ歓迎。</span>
+      <span data-lang="ko">위 일정은 참고용이며, 합리적인 범위 내에서 조정 가능합니다. 맞춤 일정 환영.</span>
+      <br>👶
+      <span data-lang="zh">小孩亦算 1 人；5 人座最多搭乘 4 人，建議 3 人最舒適。需兒童安全座椅請<strong>提前預約並另計費用</strong>。</span>
+      <span data-lang="en">Children count as 1 person. 5-seat max. 4 passengers; 3 recommended for comfort. Child car seats require <strong>advance booking and extra fee</strong>.</span>
+      <span data-lang="ja">子どもも1名としてカウント。5人乗りは最大4名、3名が快適。チャイルドシートは<strong>要事前予約・別途料金</strong>。</span>
+      <span data-lang="ko">어린이도 1인으로 계산. 5인승 최대 4명 탑승, 3명이 가장 쾌적. 유아용 카시트는 <strong>사전 예약 및 추가 요금</strong> 필요.</span>
+      <br>🌐 <strong>
+        <span data-lang="zh">外語導覽</span><span data-lang="en">Foreign Language Guide</span><span data-lang="ja">外国語ガイド</span><span data-lang="ko">외국어 가이드</span>
+      </strong>
+      <span data-lang="zh">另外計算</span><span data-lang="en">— additional charge applies</span><span data-lang="ja">— 別途料金</span><span data-lang="ko">— 별도 요금</span>
+      <br>🗓️ <strong>
+        <span data-lang="zh">客製行程</span><span data-lang="en">Custom Itinerary</span><span data-lang="ja">カスタムプラン</span><span data-lang="ko">맞춤 일정</span>
+      </strong>
+      <span data-lang="zh">請洽櫃檯專員</span><span data-lang="en">— please contact front desk</span><span data-lang="ja">— フロントへお問い合わせを</span><span data-lang="ko">— 프런트 문의</span>
+    </div>
+  </div>
+</section>
+
+<!-- ③ BUS -->
+<section class="section-card" id="bus">
+  <div class="section-header">
+    <span class="icon">🚌</span>
+    <h2>
+      <span data-lang="zh">公車路線（東大門夜市站下車）</span><span data-lang="en">Bus Routes</span><span data-lang="ja">バス路線</span><span data-lang="ko">버스 노선</span>
+      <small>
+        <span data-lang="zh">途經東大門夜市</span>
+        <span data-lang="en">Alight at Dongdamen Night Market Stop</span>
+        <span data-lang="ja">東大門夜市駅下車</span>
+        <span data-lang="ko">동따먼 야시장 정류장 하차</span>
+      </small>
+    </h2>
+  </div>
+  <div class="section-body">
+
+    <div class="bus-route">
+      <span class="bus-badge">301</span>
+      <div class="bus-info">
+        <div class="bus-name">301</div>
+      </div>
+    </div>
+
+    <div class="bus-route">
+      <span class="bus-badge">308</span>
+      <div class="bus-info">
+        <div class="bus-name">308</div>
+      </div>
+    </div>
+
+    <div class="bus-route">
+      <span class="bus-badge">310</span>
+      <div class="bus-info">
+        <div class="bus-name">310</div>
+      </div>
+    </div>
+
+    <div class="bus-route">
+      <span class="bus-badge">307</span>
+      <div class="bus-info">
+        <div class="bus-name">307</div>
+        <div class="bus-freq">
+          <span data-lang="zh">⏱ 多為平日特定時段行駛，請事先確認班表</span>
+          <span data-lang="en">⏱ Mainly weekday limited hours — check schedule in advance</span>
+          <span data-lang="ja">⏱ 主に平日の特定時間帯のみ運行。事前に時刻表をご確認ください</span>
+          <span data-lang="ko">⏱ 주로 평일 특정 시간대만 운행. 사전에 시간표 확인 필요</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bus-note">
+      📍
+      <span data-lang="zh">下車後步行約 3–5 分鐘即可抵達一起一起花蓮中山館。建議出發後可到台鐵花蓮站外「花蓮轉運站」詢問最新班表，以實際時刻為準。</span>
+      <span data-lang="en">About 3–5 min walk from the stop to Together Hotel Hualien Zhongshan. Check the latest timetable at Hualien County Transport Bureau before departure.</span>
+      <span data-lang="ja">バス停から一起一起旅店（花蓮中山館）まで徒歩約3〜5分。出発前に花蓮県交通旅游処で最新時刻表をご確認ください。</span>
+      <span data-lang="ko">정류장에서 Together Hotel 화롄 중산관까지 도보 약 3~5분. 출발 전 화롄 현 교통관광처에서 최신 시간표를 확인하세요.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ④ TAXI -->
+<section class="section-card" id="taxi">
+  <div class="section-header">
+    <span class="icon">🚕</span>
+    <h2>
+      <span data-lang="zh">花蓮在地計程車</span><span data-lang="en">Local Taxi</span><span data-lang="ja">地元タクシー</span><span data-lang="ko">현지 택시</span>
+      <small>Local Taxi</small>
+    </h2>
+  </div>
+  <div class="section-body">
+    <div class="taxi-list">
+
+      <div class="taxi-card">
+        <div>
+          <div class="taxi-name">美美計程車行</div>
+          <div class="taxi-number">03-834-6666</div>
+        </div>
+        <a class="call-btn" href="tel:038346666">📞
+          <span data-lang="zh">直撥</span><span data-lang="en">Call</span><span data-lang="ja">電話</span><span data-lang="ko">전화</span>
+        </a>
+      </div>
+
+      <div class="taxi-card">
+        <div>
+          <div class="taxi-name">統一計程車行</div>
+          <div class="taxi-number">0800-659-659</div>
+        </div>
+        <a class="call-btn" href="tel:0800659659">📞
+          <span data-lang="zh">直撥</span><span data-lang="en">Call</span><span data-lang="ja">電話</span><span data-lang="ko">전화</span>
+        </a>
+      </div>
+
+      <div class="taxi-card">
+        <div>
+          <div class="taxi-name">大豐計程車行</div>
+          <div class="taxi-number">0800-509-509</div>
+        </div>
+        <a class="call-btn" href="tel:0800509509">📞
+          <span data-lang="zh">直撥</span><span data-lang="en">Call</span><span data-lang="ja">電話</span><span data-lang="ko">전화</span>
+        </a>
+      </div>
+
+      <div class="taxi-card">
+        <div>
+          <div class="taxi-name">國聲計程車行</div>
+          <div class="taxi-number">0800-337-337</div>
+        </div>
+        <a class="call-btn" href="tel:0800337337">📞
+          <span data-lang="zh">直撥</span><span data-lang="en">Call</span><span data-lang="ja">電話</span><span data-lang="ko">전화</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ⑤ PARKING -->
+<section class="section-card" id="parking">
+  <div class="section-header">
+    <span class="icon">🅿️</span>
+    <h2>
+      <span data-lang="zh">停車資訊</span><span data-lang="en">Parking Info</span><span data-lang="ja">駐車場情報</span><span data-lang="ko">주차 안내</span>
+      <small>Parking</small>
+    </h2>
+  </div>
+  <div class="section-body">
+
+    <div class="parking-block">
+      <div class="parking-label">
+        <span data-lang="zh">本館停車</span><span data-lang="en">Hotel Parking</span><span data-lang="ja">ホテル駐車場</span><span data-lang="ko">호텔 주차</span>
+      </div>
+      <p>
+        <span data-lang="zh">本館<strong>無提供停車位</strong>，請旅客自行安排。</span>
+        <span data-lang="en">This hotel does <strong>not provide parking</strong>. Please arrange independently.</span>
+        <span data-lang="ja">当館には<strong>駐車場はございません</strong>。各自でご手配ください。</span>
+        <span data-lang="ko">본 호텔은 <strong>주차 공간을 제공하지 않습니다</strong>. 개별적으로 준비하세요.</span>
+      </p>
+    </div>
+
+    <div class="parking-block">
+      <div class="parking-label">
+        <span data-lang="zh">路邊收費停車格</span><span data-lang="en">Metered Street Parking</span><span data-lang="ja">路上有料駐車スペース</span><span data-lang="ko">노상 유료 주차</span>
+      </div>
+      <p>
+        <span data-lang="zh">1 小時 <strong>NT$20</strong><br>晚上 <strong>22:00</strong> 至隔日早上 <strong>10:00</strong> 免費停車</span>
+        <span data-lang="en"><strong>NT$20</strong> per hour<br>Free from <strong>10:00 PM</strong> to next day <strong>10:00 AM</strong></span>
+        <span data-lang="ja">1時間 <strong>NT$20</strong><br><strong>22:00</strong>〜翌<strong>10:00</strong> は無料</span>
+        <span data-lang="ko">시간당 <strong>NT$20</strong><br>밤 <strong>22:00</strong> ~ 다음날 <strong>10:00</strong> 무료</span>
+      </p>
+    </div>
+
+    <div class="parking-block">
+      <div class="parking-label">
+        <span data-lang="zh">東大門福町夜市旁免費停車</span>
+        <span data-lang="en">Free Parking near Dongdamen Night Market</span>
+        <span data-lang="ja">東大門夜市近くの無料駐車場</span>
+        <span data-lang="ko">동따먼 야시장 근처 무료 주차</span>
+      </div>
+      <p>
+        <span data-lang="zh">縣政府所有土地，先到先得。若縣府辦理活動，該區域可能暫停使用，請留意最新公告。</span>
+        <span data-lang="en">County government land — first come, first served. May be closed during county events. Check notices in advance.</span>
+        <span data-lang="ja">県有地のため先着順。県のイベント開催時は一時閉鎖の場合あり。最新情報をご確認ください。</span>
+        <span data-lang="ko">군유지, 선착순 이용. 군 행사 시 일시 폐쇄될 수 있으니 사전 공지 확인 필요.</span>
+      </p>
+    </div>
+
+    <div class="parking-block">
+      <div class="parking-label">
+        <span data-lang="zh">附近私人停車場</span>
+        <span data-lang="en">Nearby Private Car Parks</span>
+        <span data-lang="ja">近隣の民間駐車場</span>
+        <span data-lang="ko">근처 민간 주차장</span>
+      </div>
+      <p>
+        <span data-lang="zh">收費標準依各停車場規定，請<strong>進場前自行確認</strong>。本館不負停車相關責任。</span>
+        <span data-lang="en">Fees vary by car park — <strong>confirm before entering</strong>. The hotel is not liable for parking.</span>
+        <span data-lang="ja">料金は駐車場ごとに異なります。<strong>入場前にご確認ください</strong>。当館は駐車に関して責任を負いません。</span>
+        <span data-lang="ko">요금은 주차장마다 다릅니다. <strong>입차 전에 확인하세요</strong>. 호텔은 주차 관련 책임을 지지 않습니다.</span>
+      </p>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="duck-row">🦆🌿🦆</div>
+  <p class="footer-name">一起一起旅店 花蓮中山館</p>
+  <p>Together Hotel Hualien Zhongshan</p>
+  <p style="margin-top:8px; font-size:0.8rem; color:var(--deep-green);">如有其他交通問題，歡迎直接留言詢問 🦆</p>
+  <hr class="footer-divider">
+  <p class="copyright">
+    © 2026 一起一起旅店花蓮中山館<br>
+    版權所有，未經授權禁止複製或轉載本頁任何內容。<br>
+    All rights reserved. Unauthorized reproduction or redistribution of any content on this page is prohibited.
+  </p>
+</footer>
+
+<script>
+  function setLang(lang) {
+    document.body.className = 'lang-' + lang;
+    document.querySelectorAll('.lang-btn').forEach(function(btn) {
+      btn.classList.remove('active');
+    });
+    var langs = ['zh','en','ja','ko'];
+    var labels = ['中文','EN','日本語','한국어'];
+    var idx = langs.indexOf(lang);
+    document.querySelectorAll('.lang-btn')[idx].classList.add('active');
+  }
+</script>
+</body>
+</html>
